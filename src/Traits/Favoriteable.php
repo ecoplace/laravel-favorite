@@ -27,7 +27,7 @@ trait Favoriteable
 
     /**
      * Add this Object to the user favorites
-     * 
+     *
      * @param  int $user_id  [if  null its added to the auth user]
      */
     public function addFavorite($user_id = null)
@@ -40,7 +40,7 @@ trait Favoriteable
      * Remove this Object from the user favorites
      *
      * @param  int $user_id  [if  null its added to the auth user]
-     * 
+     *
      */
     public function removeFavorite($user_id = null)
     {
@@ -49,7 +49,7 @@ trait Favoriteable
 
     /**
      * Toggle the favorite status from this Object
-     * 
+     *
      * @param  int $user_id  [if  null its added to the auth user]
      */
     public function toggleFavorite($user_id = null)
@@ -59,7 +59,7 @@ trait Favoriteable
 
     /**
      * Check if the user has favorited this Object
-     * 
+     *
      * @param  int $user_id  [if  null its added to the auth user]
      * @return boolean
      */
@@ -70,19 +70,21 @@ trait Favoriteable
 
     /**
      * Return a collection with the Users who marked as favorite this Object.
-     * 
+     *
      * @return Collection
      */
     public function favoritedBy()
     {
         return $this->favorites()->with('user')->get()->mapWithKeys(function ($item) {
-            return [$item['user']->id => $item['user']];
+            if($item['user'])
+                return [$item['user']->id => $item['user']];
+            return [];
         });
     }
 
     /**
      * Count the number of favorites
-     * 
+     *
      * @return int
      */
     public function getFavoritesCountAttribute()
@@ -100,7 +102,7 @@ trait Favoriteable
 
     /**
      * Add deleted observer to delete favorites registers
-     * 
+     *
      * @return void
      */
     public static function bootFavoriteable()
